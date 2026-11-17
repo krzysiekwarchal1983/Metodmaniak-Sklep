@@ -1,0 +1,44 @@
+/* Scoped to the MetodApka shell only; never overrides the shop globally. */
+.metodapka {
+  --mm-lime: var(--brand-fluo);
+  --color-lime-400: var(--brand-fluo);
+  font-family: 'Manrope', sans-serif;
+}
+.metodapka .mm-header {
+  background: linear-gradient(90deg, hsl(var(--brand-fluo-hsl) / .10), hsl(var(--background)) 50%, hsl(var(--brand-fluo-hsl) / .10));
+}
+.metodapka :where(button, a, input, select, [role="button"]):focus-visible {
+  outline: 2px solid var(--brand-fluo);
+  outline-offset: 2px;
+}
+.metodapka .mm-nav-btn {
+  display: inline-flex; align-items: center; gap: .5rem; min-height: 2.5rem;
+  padding: 0 1rem; border-radius: .375rem; border: 1px solid hsl(var(--border));
+  font-size: .875rem; font-weight: 600; transition: border-color .15s, background .15s, transform .15s;
+}
+.metodapka .mm-nav-btn:hover { border-color: hsl(var(--brand-fluo-hsl) / .6); background: hsl(var(--brand-fluo-hsl) / .06); }
+.metodapka .mm-nav-btn:active { transform: scale(.97); }
+.metodapka .mm-nav-btn[aria-current="page"] { background: var(--brand-fluo); color: #0f110e; border-color: var(--brand-fluo); font-weight: 800; }
+.metodapka .mm-nav-icon { width: 2.5rem; padding: 0; justify-content: center; }
+.metodapka .mm-locked { position: relative; }
+.metodapka .mm-locked > .mm-locked-inner { opacity: .45; pointer-events: none; user-select: none; }
+.metodapka .mm-tool-section > div { padding-left: 0; padding-right: 0; }
+.metodapka .mm-tools-grid > .mm-tool-section {
+  border: 1px solid rgb(255 255 255 / .10);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+.metodapka .mm-tools-grid input { min-width: 0; }
+.metodapka .mm-weather-integrated :is([data-testid="section-weather-current"], [data-testid^="chart-weather-"], .weather-metric, .weather-advice, .weather-location-panel) {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding-left: 0;
+  padding-right: 0;
+}
+.metodapka .mm-weather-integrated [data-testid="section-weather-current"] { padding-top: 0; }
+.metodapka .mm-weather-integrated .weather-location-panel { padding-top: 0; padding-bottom: 0; }
+@media (min-width: 640px) {
+  .metodapka .mm-tools-grid > .mm-tool-section { padding: 1.5rem; }
+}
+@media (prefers-reduced-motion: reduce) { .metodapka .mm-nav-btn { transition: none; } }

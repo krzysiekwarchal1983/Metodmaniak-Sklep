@@ -1,0 +1,258 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// This security rules file assumes the following data structures:
+//
+// Collection: admins
+// Document ID: {uid}
+// Fields:
+//   - role: string (optional) - admin role marker
+//   - createdAt: timestamp/string (optional) - creation time
+//
+// Collection: counters
+// Document ID: {counterId}
+// Fields:
+//   - seq: int (required) - sequential counter value
+//
+// Collection: products
+// Document ID: {productId}
+// Fields:
+//   - name: string (required, 1..150 chars) - product title
+//   - priceCents: int (required, >= 0) - price in grosz/cents
+//   - stock: int (required, >= 0) - current stock quantity
+//   - category: string (optional) - product category
+//   - description: string (optional) - product description
+//   - imageUrl: string (optional) - product image URL
+//   - featured: bool (optional) - featured flag
+//
+// Collection: videos
+// Document ID: {videoId}
+// Fields:
+//   - title: string (required, 1..180 chars) - video title
+//   - youtubeId: string (optional) - YouTube video identifier or URL
+//   - category: string (optional) - video category
+//
+// Collection: fisheries
+// Document ID: {fisheryId}
+// Fields:
+//   - name: string (required, 1..160 chars) - fishery name
+//   - location: string (optional) - fishery location
+//   - description: string (optional) - fishery details
+//
+// Collection: fishing_events
+// Document ID: {eventId}
+// Fields:
+//   - name: string (required, 1..160 chars) - event name
+//   - date: string (optional) - event date
+//   - location: string (optional) - event location
+//
+// Collection: orders
+// Document ID: {orderId}
+// Fields:
+//   - customerId: string (required) - UID of the customer who placed the order
+//   - status: string (required) - order lifecycle status
+//   - totalCents: int (required, >= 0) - order total in grosz/cents
+//
+// Collection: stock_history
+// Document ID: {entryId}
+// Fields:
+//   - productId: string (required) - associated product ID
+//   - delta: int (required) - stock change delta
+//   - createdAt: string/timestamp (required, immutable) - audit timestamp
+//
+// Collection: uploads
+// Document ID: {uploadId}
+// Fields:
+//   - published: bool (required) - whether upload is publicly visible
+//   - url: string (optional) - media URL
+//
+// Collection: site_traffic_daily
+// Document ID: {docId}
+// Fields:
+//   - day: string (required, 10 chars YYYY-MM-DD, immutable) - traffic day
+//   - path: string (required, 1..120 chars, immutable) - visited path
+//   - views: int (required, starts at 1, increments by +1) - view count
+//
+// Collection: users
+// Document ID: {userId}
+// Fields:
+//   - id: string (required, must match userId, immutable) - user UID
+//   - email: string (optional, PII) - user email address
+//   - name: string (optional, PII) - user display name
+//   - role: string (optional, 'user' | 'admin', protected) - RBAC role
+//   - registeredAt: string/timestamp (required on update, immutable) - registration timestamp
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.get('role', '') == 'admin' ||
+        request.auth.token.get('admin', false) == true ||
+        (
+          request.auth.token.get('email_verified', false) == true &&
+          (
+            request.auth.token.get('email', '') == 'krzysiekwarchal@gmail.com' ||
+            request.auth.token.get('email', '') == 'krzysztofwarchal@gmail.com'
+          )
+        ) ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // ===============================================================
+    // Domain Validators (Used in both create and update)
+    // ===============================================================
+
+    function isValidProduct(data) {
+      return data.name is string &&
+        data.name.size() > 0 &&
+        data.name.size() <= 150 &&
+        data.priceCents is int &&
+        data.priceCents >= 0 &&
+        data.stock is int &&
+        data.stock >= 0;
+    }
+
+    function isValidVideo(data) {
+      return data.title is string &&
+        data.title.size() > 0 &&
+        data.title.size() <= 180;
+    }
+
+    function isValidFishery(data) {
+      return data.name is string &&
+        data.name.size() > 0 &&
+        data.name.size() <= 160;
+    }
+
+    function isValidFishingEvent(data) {
+      return data.name is string &&
+        data.name.size() > 0 &&
+        data.name.size() <= 160;
+    }
+
+    function isValidSiteTrafficCreate(data) {
+      return hasOnlyAllowedFields(['day', 'path', 'views']) &&
+        data.day is string &&
+        data.day.size() == 10 &&
+        data.path is string &&
+        data.path.size() >= 1 &&
+        data.path.size() <= 120 &&
+        data.views == 1;
+    }
+
+    function isValidSiteTrafficUpdate(data, prev) {
+      return hasOnlyAllowedFields(['day', 'path', 'views']) &&
+        data.day == prev.day &&
+        data.path == prev.path &&
+        data.views == prev.views + 1;
+    }
+
+    function isValidSelfUserCreate(userId, data) {
+      return isOwner(userId) &&
+        (!('role' in data) || data.role == 'user') &&
+        data.id == userId;
+    }
+
+    function isValidSelfUserUpdate(userId, data, prev) {
+      return isOwner(userId) &&
+        (!('role' in data) || data.role == prev.get('role', 'user')) &&
+        data.id == userId &&
+        data.registeredAt == prev.registeredAt;
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    match /admins/{uid} {
+      allow read: if isSignedIn() && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    match /counters/{counterId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /products/{productId} {
+      allow read: if isAdmin();
+      allow create, update: if isAdmin() && isValidProduct(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /videos/{videoId} {
+      allow read: if isAdmin();
+      allow create, update: if isAdmin() && isValidVideo(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /fisheries/{fisheryId} {
+      allow read: if isAdmin();
+      allow create, update: if isAdmin() && isValidFishery(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /fishing_events/{eventId} {
+      allow read: if isAdmin();
+      allow create, update: if isAdmin() && isValidFishingEvent(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /orders/{orderId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.customerId == request.auth.uid);
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /stock_history/{entryId} {
+      allow read, create: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /uploads/{uploadId} {
+      allow read: if isAdmin() || resource.data.published == true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /site_traffic_daily/{docId} {
+      allow read: if isAdmin();
+      allow create: if isValidSiteTrafficCreate(request.resource.data);
+      allow update: if isValidSiteTrafficUpdate(request.resource.data, resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow get: if isAdmin() || (isSignedIn() && request.auth.uid == userId);
+      allow list: if isAdmin();
+      allow create: if isAdmin() || isValidSelfUserCreate(userId, request.resource.data);
+      allow update: if isAdmin() || isValidSelfUserUpdate(userId, request.resource.data, resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // Default deny for all unmatched paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

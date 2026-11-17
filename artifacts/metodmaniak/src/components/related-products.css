@@ -1,0 +1,8 @@
+.related-products-track { scrollbar-width: none; }
+.related-products-track::-webkit-scrollbar { display: none; }
+.related-carousel-arrow { opacity: 0; pointer-events: none; transition: opacity 200ms, color 200ms, border-color 200ms; }
+.related-carousel:hover .related-carousel-arrow,
+.related-carousel:has(:focus-visible) .related-carousel-arrow { opacity: 1; pointer-events: auto; }
+@media (max-width: 767px), (pointer: coarse) {
+  .related-carousel-arrow { opacity: 1; pointer-events: auto; }
+}

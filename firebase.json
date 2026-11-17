@@ -1,0 +1,38 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json",
+    "database": "(default)",
+    "location": "europe-central2"
+  },
+  "auth": {
+    "providers": {
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "MetodManiak",
+        "supportEmail": "krzysiekwarchal@gmail.com",
+        "authorizedRedirectUris": [
+          "https://metodmaniak-sklep-internetowy.firebaseapp.com/__/auth/handler",
+          "https://metodmaniak-sklep-internetowy.web.app/__/auth/handler",
+          "http://localhost:5173"
+        ]
+      }
+    }
+  },
+  "hosting": {
+    "public": "artifacts/metodmaniak/dist/public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
+  }
+}

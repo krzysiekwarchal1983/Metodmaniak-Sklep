@@ -1,0 +1,200 @@
+{
+  "/images/editorial-hands.png": {
+    "width": 1024,
+    "height": 1024,
+    "originalBytes": 1625774,
+    "sources": [
+      {
+        "width": 320,
+        "src": "/images/optimized/editorial-hands-320.webp",
+        "bytes": 13224
+      },
+      {
+        "width": 640,
+        "src": "/images/optimized/editorial-hands-640.webp",
+        "bytes": 38570
+      },
+      {
+        "width": 1024,
+        "src": "/images/optimized/editorial-hands-1024.webp",
+        "bytes": 81554
+      }
+    ]
+  },
+  "/images/groundbait.png": {
+    "width": 1024,
+    "height": 1024,
+    "originalBytes": 1692171,
+    "sources": [
+      {
+        "width": 320,
+        "src": "/images/optimized/groundbait-320.webp",
+        "bytes": 23774
+      },
+      {
+        "width": 640,
+        "src": "/images/optimized/groundbait-640.webp",
+        "bytes": 69420
+      },
+      {
+        "width": 1024,
+        "src": "/images/optimized/groundbait-1024.webp",
+        "bytes": 134776
+      }
+    ]
+  },
+  "/images/hero-fishing.png": {
+    "width": 1024,
+    "height": 1024,
+    "originalBytes": 1425994,
+    "sources": [
+      {
+        "width": 320,
+        "src": "/images/optimized/hero-fishing-320.webp",
+        "bytes": 10748
+      },
+      {
+        "width": 640,
+        "src": "/images/optimized/hero-fishing-640.webp",
+        "bytes": 27842
+      },
+      {
+        "width": 1024,
+        "src": "/images/optimized/hero-fishing-1024.webp",
+        "bytes": 52632
+      }
+    ]
+  },
+  "/images/hooks.png": {
+    "width": 1024,
+    "height": 1024,
+    "originalBytes": 1421893,
+    "sources": [
+      {
+        "width": 320,
+        "src": "/images/optimized/hooks-320.webp",
+        "bytes": 5748
+      },
+      {
+        "width": 640,
+        "src": "/images/optimized/hooks-640.webp",
+        "bytes": 26892
+      },
+      {
+        "width": 1024,
+        "src": "/images/optimized/hooks-1024.webp",
+        "bytes": 75200
+      }
+    ]
+  },
+  "/images/pellet.png": {
+    "width": 1024,
+    "height": 1024,
+    "originalBytes": 1655367,
+    "sources": [
+      {
+        "width": 320,
+        "src": "/images/optimized/pellet-320.webp",
+        "bytes": 19196
+      },
+      {
+        "width": 640,
+        "src": "/images/optimized/pellet-640.webp",
+        "bytes": 62600
+      },
+      {
+        "width": 1024,
+        "src": "/images/optimized/pellet-1024.webp",
+        "bytes": 129990
+      }
+    ]
+  },
+  "/images/wafters-orange.png": {
+    "width": 1024,
+    "height": 1024,
+    "originalBytes": 1332376,
+    "sources": [
+      {
+        "width": 320,
+        "src": "/images/optimized/wafters-orange-320.webp",
+        "bytes": 9536
+      },
+      {
+        "width": 640,
+        "src": "/images/optimized/wafters-orange-640.webp",
+        "bytes": 26886
+      },
+      {
+        "width": 1024,
+        "src": "/images/optimized/wafters-orange-1024.webp",
+        "bytes": 53854
+      }
+    ]
+  },
+  "/images/wafters-pink.png": {
+    "width": 1024,
+    "height": 1024,
+    "originalBytes": 1348347,
+    "sources": [
+      {
+        "width": 320,
+        "src": "/images/optimized/wafters-pink-320.webp",
+        "bytes": 9942
+      },
+      {
+        "width": 640,
+        "src": "/images/optimized/wafters-pink-640.webp",
+        "bytes": 28680
+      },
+      {
+        "width": 1024,
+        "src": "/images/optimized/wafters-pink-1024.webp",
+        "bytes": 58066
+      }
+    ]
+  },
+  "/images/wafters-white.png": {
+    "width": 1024,
+    "height": 1024,
+    "originalBytes": 1446123,
+    "sources": [
+      {
+        "width": 320,
+        "src": "/images/optimized/wafters-white-320.webp",
+        "bytes": 13642
+      },
+      {
+        "width": 640,
+        "src": "/images/optimized/wafters-white-640.webp",
+        "bytes": 38288
+      },
+      {
+        "width": 1024,
+        "src": "/images/optimized/wafters-white-1024.webp",
+        "bytes": 74992
+      }
+    ]
+  },
+  "/images/wafters-yellow.png": {
+    "width": 1024,
+    "height": 1024,
+    "originalBytes": 1380634,
+    "sources": [
+      {
+        "width": 320,
+        "src": "/images/optimized/wafters-yellow-320.webp",
+        "bytes": 13948
+      },
+      {
+        "width": 640,
+        "src": "/images/optimized/wafters-yellow-640.webp",
+        "bytes": 37024
+      },
+      {
+        "width": 1024,
+        "src": "/images/optimized/wafters-yellow-1024.webp",
+        "bytes": 72496
+      }
+    ]
+  }
+}

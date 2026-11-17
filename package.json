@@ -1,0 +1,21 @@
+{
+  "name": "workspace",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "test:stock-history": "pnpm --filter @workspace/api-server run test:stock-history && pnpm --filter @workspace/metodmaniak run test:session",
+    "test:stock": "pnpm --filter @workspace/api-server run test:stock && pnpm --filter @workspace/metodmaniak run test:stock",
+    "test:catalog": "pnpm --filter @workspace/metodmaniak run test:catalog:types && pnpm --filter @workspace/metodmaniak run test:catalog",
+    "build": "pnpm run typecheck && pnpm -r --if-present run build",
+    "typecheck:libs": "tsc --build",
+    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"
+  },
+  "private": true,
+  "dependencies": {
+    "@replit/connectors-sdk": "^0.4.3"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.10",
+    "typescript": "~5.9.3"
+  }
+}

@@ -1,0 +1,19 @@
+[
+  {
+    "origin": [
+      "https://YOUR_CLOUD_RUN_OR_CUSTOM_DOMAIN"
+    ],
+    "method": [
+      "GET",
+      "HEAD",
+      "PUT"
+    ],
+    "responseHeader": [
+      "Content-Type",
+      "Content-Length",
+      "Range",
+      "Accept-Ranges"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]
